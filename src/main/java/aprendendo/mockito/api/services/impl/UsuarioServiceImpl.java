@@ -3,6 +3,7 @@ package aprendendo.mockito.api.services.impl;
 import aprendendo.mockito.api.domain.Usuario;
 import aprendendo.mockito.api.repository.UsuarioRepository;
 import aprendendo.mockito.api.services.UsuarioService;
+import aprendendo.mockito.api.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,6 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Usuario findById(Long id) {
         Optional<Usuario> obj = userRepository.findById(id);
-        return obj.orElse(null);
+        return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
     }
 }
