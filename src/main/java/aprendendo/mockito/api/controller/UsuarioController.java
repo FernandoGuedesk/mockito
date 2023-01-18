@@ -41,4 +41,10 @@ public class UsuarioController {
                 .fromCurrentRequest().path("/{id}").buildAndExpand(usuarioService.create(obj).getId()).toUri();
         return  ResponseEntity.created(uri).build();
     }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<UsuarioDTO> update(@PathVariable Long id, @RequestBody UsuarioDTO obj) {
+        obj.setId(id);
+        return ResponseEntity.ok().body(modelMapper.map(usuarioService.update(obj), UsuarioDTO.class));
+    }
 }
