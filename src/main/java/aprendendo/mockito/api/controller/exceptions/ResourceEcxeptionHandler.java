@@ -1,5 +1,6 @@
 package aprendendo.mockito.api.controller.exceptions;
 
+import aprendendo.mockito.api.services.exceptions.DataIntegratvViolationException;
 import aprendendo.mockito.api.services.exceptions.ObjectNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,11 @@ public class ResourceEcxeptionHandler {
     public ResponseEntity<StandartError>objectNotFound(ObjectNotFoundException ex, HttpServletRequest request) {
         StandartError error = new StandartError(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(), ex.getMessage(), request.getRequestURI());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
 
+    @ExceptionHandler(DataIntegratvViolationException.class)
+    public ResponseEntity<StandartError>dataIntegratvViolationException(DataIntegratvViolationException ex, HttpServletRequest request) {
+        StandartError error = new StandartError(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), ex.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 }

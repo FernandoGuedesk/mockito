@@ -4,6 +4,7 @@ import aprendendo.mockito.api.domain.DTO.UsuarioDTO;
 import aprendendo.mockito.api.domain.Usuario;
 import aprendendo.mockito.api.repository.UsuarioRepository;
 import aprendendo.mockito.api.services.UsuarioService;
+import aprendendo.mockito.api.services.exceptions.DataIntegratvViolationException;
 import aprendendo.mockito.api.services.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,22 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Usuario create(UsuarioDTO obj) {
+        findByEmail(obj);
         return usuarioRepository.save(modelMapper.map(obj, Usuario.class));
     }
+
+    @Override
+    public Usuario update(UsuarioDTO obj) {
+        findByEmail(obj);
+        return usuarioRepository.save(modelMapper.map(obj, Usuario.class));
+    }
+
+    private void findByEmail(UsuarioDTO obj) {
+        Optional<Usuario> usuario = usuarioRepository.findByEmail(obj.getEmail());
+        if (usuario.isPresent() && !usuario.get().getId().equals(obj.getId())) {
+            throw new DataIntegratvViolationException("E-mail já cadastrado no sistema");
+        }
+    }
+
+
 }
