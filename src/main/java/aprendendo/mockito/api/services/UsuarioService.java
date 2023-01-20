@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface UsuarioService {
 
-    Usuario findById(Long id);
+    Usuario findById(Integer id);
     List<Usuario> findAll();
     Usuario create(UsuarioDTO obj);
     Usuario update(UsuarioDTO obj);
-    void delete(Long id);
+    void delete(Integer id);
 }

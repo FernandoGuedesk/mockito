@@ -21,9 +21,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private ModelMapper modelMapper;
+
     @Override
-    public Usuario findById(Long id) {
-        Optional<Usuario> obj = usuarioRepository.findById(id);
+    public Usuario findById(Integer id) {
+        var obj = usuarioRepository.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
     }
     public List<Usuario> findAll() {
@@ -43,7 +44,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Integer id) {
         findById(id);
         usuarioRepository.deleteById(id);
     }
@@ -55,6 +56,5 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new DataIntegratvViolationException("E-mail já cadastrado no sistema");
         }
     }
-
 
 }

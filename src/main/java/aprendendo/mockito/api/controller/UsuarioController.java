@@ -24,7 +24,7 @@ public class UsuarioController {
     private ModelMapper modelMapper;
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<UsuarioDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<UsuarioDTO> findById(@PathVariable Integer id) {
         return ResponseEntity.ok().body(modelMapper.map(usuarioService.findById(id),UsuarioDTO.class));
 
     }
@@ -43,13 +43,13 @@ public class UsuarioController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<UsuarioDTO> update(@PathVariable Long id, @RequestBody UsuarioDTO obj) {
+    public ResponseEntity<UsuarioDTO> update(@PathVariable Integer id, @RequestBody UsuarioDTO obj) {
         obj.setId(id);
         return ResponseEntity.ok().body(modelMapper.map(usuarioService.update(obj), UsuarioDTO.class));
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<UsuarioDTO> delete(@PathVariable Long id) {
+    public ResponseEntity<UsuarioDTO> delete(@PathVariable Integer id) {
         usuarioService.delete(id);
         return ResponseEntity.noContent().build();
 
