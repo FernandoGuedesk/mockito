@@ -13,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
@@ -28,6 +29,7 @@ class UsuarioServiceImplTeste {
     private static final String EMAIL = "valdir@email.com";
     private static final String SENHA = "123";
     private static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado";
+    private static final int INDEX = 0;
     @InjectMocks
     private UsuarioServiceImpl service;
     @Mock
@@ -70,7 +72,19 @@ class UsuarioServiceImplTeste {
         }
     }
     @Test
-    void findAll() {
+    void whenFindAllThenReturnAnListOfUsuarios() {
+        when(repository.findAll()).thenReturn(List.of(usuario));
+
+        List<Usuario> response = service.findAll();
+
+        assertNotNull(response);
+        assertEquals(1, response.size());
+        assertEquals(Usuario.class, response.get(INDEX).getClass());
+
+        assertEquals(ID, response.get(INDEX).getId());
+        assertEquals(NAME, response.get(INDEX).getName());
+        assertEquals(EMAIL, response.get(INDEX).getEmail());
+        assertEquals(SENHA, response.get(INDEX).getSenha());
     }
 
     @Test
