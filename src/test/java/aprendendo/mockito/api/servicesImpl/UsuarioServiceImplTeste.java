@@ -3,6 +3,7 @@ package aprendendo.mockito.api.servicesImpl;
 import aprendendo.mockito.api.domain.DTO.UsuarioDTO;
 import aprendendo.mockito.api.domain.Usuario;
 import aprendendo.mockito.api.repository.UsuarioRepository;
+import aprendendo.mockito.api.services.exceptions.DataIntegratvViolationException;
 import aprendendo.mockito.api.services.exceptions.ObjectNotFoundException;
 import aprendendo.mockito.api.services.impl.UsuarioServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +19,7 @@ import java.util.Optional;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -100,6 +100,19 @@ class UsuarioServiceImplTeste {
         assertEquals(NAME, response.getName());
         assertEquals(EMAIL, response.getEmail());
         assertEquals(SENHA, response.getSenha());
+    }
+
+    @Test
+    void whenCreateThenReturnAnDataIntegrityViolationException() {
+        when(repository.findByEmail(anyString())).thenReturn(optionalUsuario);
+
+        try{
+            optionalUsuario.get().setId(2);
+            service.create(usuarioDTO);
+        } catch (Exception ex) {
+            assertEquals(DataIntegratvViolationException.class, ex.getClass());
+            assertEquals("E-mail já cadastrado no sistema", ex.getMessage());
+        }
     }
 
     @Test
