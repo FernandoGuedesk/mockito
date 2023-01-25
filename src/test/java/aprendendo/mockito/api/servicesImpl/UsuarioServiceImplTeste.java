@@ -3,12 +3,12 @@ package aprendendo.mockito.api.servicesImpl;
 import aprendendo.mockito.api.domain.DTO.UsuarioDTO;
 import aprendendo.mockito.api.domain.Usuario;
 import aprendendo.mockito.api.repository.UsuarioRepository;
+import aprendendo.mockito.api.services.exceptions.ObjectNotFoundException;
 import aprendendo.mockito.api.services.impl.UsuarioServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -57,6 +57,17 @@ class UsuarioServiceImplTeste {
         assertEquals(EMAIL, response.getEmail());
     }
 
+    @Test
+    void whenFindByIdThenReturnAnObjectNotFoundException() {
+        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException("Objeto não encontrado"));
+
+        try {
+            service.findById(ID);
+        } catch (Exception ex) {
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals("Objeto não encontrado", ex.getMessage());
+        }
+    }
     @Test
     void findAll() {
     }
