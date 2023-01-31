@@ -18,12 +18,13 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/usuario")
 public class UsuarioController {
 
+    private static final String ID = "/{id}";
     @Autowired
     private UsuarioService usuarioService;
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = ID)
     public ResponseEntity<UsuarioDTO> findById(@PathVariable Integer id) {
         return ResponseEntity.ok().body(modelMapper.map(usuarioService.findById(id),UsuarioDTO.class));
 
@@ -38,17 +39,17 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity<UsuarioDTO> create(@RequestBody UsuarioDTO obj) {
         URI uri = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{id}").buildAndExpand(usuarioService.create(obj).getId()).toUri();
+                .fromCurrentRequest().path(ID).buildAndExpand(usuarioService.create(obj).getId()).toUri();
         return  ResponseEntity.created(uri).build();
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = ID)
     public ResponseEntity<UsuarioDTO> update(@PathVariable Integer id, @RequestBody UsuarioDTO obj) {
         obj.setId(id);
         return ResponseEntity.ok().body(modelMapper.map(usuarioService.update(obj), UsuarioDTO.class));
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = ID)
     public ResponseEntity<UsuarioDTO> delete(@PathVariable Integer id) {
         usuarioService.delete(id);
         return ResponseEntity.noContent().build();
