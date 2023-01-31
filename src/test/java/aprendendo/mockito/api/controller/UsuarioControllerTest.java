@@ -3,17 +3,18 @@ package aprendendo.mockito.api.controller;
 import aprendendo.mockito.api.domain.DTO.UsuarioDTO;
 import aprendendo.mockito.api.domain.Usuario;
 import aprendendo.mockito.api.services.impl.UsuarioServiceImpl;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 class UsuarioControllerTest {
@@ -42,7 +43,21 @@ class UsuarioControllerTest {
     }
 
     @Test
-    void findById() {
+    void whenFindByIdThenReturnSuccess() {
+        Mockito.when(service.findById(Mockito.anyInt())).thenReturn(usuario);
+        Mockito.when(mapper.map(any(), Mockito.any())).thenReturn(usuarioDTO);
+
+        ResponseEntity<UsuarioDTO> response = controller.findById(ID);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertNotNull(response.getBody());
+        Assertions.assertEquals(ResponseEntity.class, response.getClass());
+        Assertions.assertEquals(UsuarioDTO.class, response.getBody().getClass());
+
+        Assertions.assertEquals(ID, response.getBody().getId());
+        Assertions.assertEquals(NAME, response.getBody().getName());
+        Assertions.assertEquals(EMAIL, response.getBody().getEmail());
+        Assertions.assertEquals(SENHA, response.getBody().getSenha());
     }
 
     @Test
